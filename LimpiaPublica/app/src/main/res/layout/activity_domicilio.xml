@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/azulclaro"
+    tools:context="owl.app.limpia_publica.activities.DomicilioActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.20"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/logo"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.40"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contribuyente:"
+                android:layout_marginLeft="15dp"
+                android:textColor="@color/colorPrimaryText"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+
+            <EditText
+                android:id="@+id/editTextContribuyenteAct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:background="@drawable/editextformularioshape"
+                android:layout_margin="15dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Importe:"
+                android:layout_marginLeft="15dp"
+                android:textColor="@color/colorPrimaryText"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+
+            <EditText
+                android:id="@+id/editTextImporteAct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/editextformularioshape"
+                android:layout_margin="15dp"
+                android:inputType="numberDecimal"
+                android:gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/cobrarButtonAct"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.10"
+            android:text="$ COBRAR"
+            android:background="@drawable/buttonshape"
+            android:layout_margin="15dp"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+
+</android.support.constraint.ConstraintLayout>

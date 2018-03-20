@@ -1,0 +1,70 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="owl.app.limpia_publica.fragments.DomicilioFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:background="@color/colorIcons">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/logo"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorDivider" />
+
+            <EditText
+                android:id="@+id/editTextContribuyente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="contribuyente"
+                android:background="@drawable/editextformularioshape"
+                android:layout_margin="15dp"
+                android:gravity="center_horizontal"/>
+
+            <EditText
+                android:id="@+id/editTextImporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Importe"
+                android:background="@drawable/editextformularioshape"
+                android:layout_margin="15dp"
+                android:gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/cobrarButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="$ COBRAR"
+                android:background="@drawable/buttonshape"
+                android:layout_margin="15dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+
+</FrameLayout>
