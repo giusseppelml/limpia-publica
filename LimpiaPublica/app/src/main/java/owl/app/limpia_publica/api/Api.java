@@ -12,7 +12,6 @@ public class Api {
     private static final String ROOT_LOGIN = ROOT_URL + "Api.php?apicall=";
 
     //login
-    public static final String URL_REGISTER = ROOT_LOGIN + "signup";
     public static final String URL_LOGIN = ROOT_LOGIN + "login";
 
     //cobros
@@ -25,6 +24,4 @@ public class Api {
     public static final int CODE_GET_REQUEST = 1024;
     public static final int CODE_POST_REQUEST = 1025;
     public static final int PICK_IMAGE_REQUEST = 1;
-
-    //http://192.168.1.68/LimpiaPublicaJson/cobro/Api/Api.php?apicall=createpago
 }
