@@ -3,8 +3,10 @@ package owl.app.limpia_publica.activities;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,16 +19,19 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -36,12 +41,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ganesh.intermecarabic.Arabic864;
+import com.honeywell.mobility.print.LinePrinter;
+import com.honeywell.mobility.print.LinePrinterException;
+import com.honeywell.mobility.print.PrintProgressEvent;
+import com.honeywell.mobility.print.PrintProgressListener;
+import com.honeywell.mobility.print.PrinterException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -89,15 +101,24 @@ public class ComercioActivity extends AppCompatActivity{
     private ImageView imageView;
     private EditText editTextName;
     private Bitmap bitmap;
+    private TextView leyenda;
 
     private boolean verificar = true;
-    ProgressDialog loadinglml;
+    private ProgressDialog loadinglml;
+
+    private String verificarLoop = "false";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comercio);
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle.getBoolean("seguridad")){
+            verificarLoop = "true";
+        }
+
+        leyenda = (TextView)findViewById(R.id.leyendaImagen);
         editContribuyente = (EditText)findViewById(R.id.editTextComercioContribuyente);
         editComercio = (EditText)findViewById(R.id.editTextComercioLocal);
         editImporte = (EditText)findViewById(R.id.editTextComercioImporte);
@@ -127,17 +148,14 @@ public class ComercioActivity extends AppCompatActivity{
             public void onClick(View view) {
                 showFileChooser();
                 verificar = false;
+                leyenda.setText("Imagen Cargada");
             }
         });
 
         buttonCobrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(verificar){
-                    createHero(dirGeo, lagLogGeo);
-                }else{
-                    uploadImage( dirGeo, lagLogGeo);
-                }
+                showInfoAlert();
             }
         });
     }
@@ -230,7 +248,12 @@ public class ComercioActivity extends AppCompatActivity{
                 if (!object.getBoolean("error")) {
                     Toast.makeText(ComercioActivity.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                     verificar = true;
-                    Intent intent = new Intent(ComercioActivity.this, MainActivity.class);
+                    Intent intent = new Intent(ComercioActivity.this, PrintActivity.class);
+                    intent.putExtra("contribuyente", editContribuyente.getText().toString().trim());
+                    intent.putExtra("comercio", editComercio.getText().toString().trim());
+                    intent.putExtra("importe", editImporte.getText().toString().trim());
+                    intent.putExtra("tipo", "Comercio");
+                    intent.putExtra("verificar", true);
                     startActivity(intent);
                 }
             } catch (JSONException e) {
@@ -390,18 +413,27 @@ public class ComercioActivity extends AppCompatActivity{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-                    //Descartar el diálogo de progreso
+                        //Descartar el diálogo de progreso
                         loading.dismiss();
                         //Mostrando el mensaje de la respuesta
                         Toast.makeText(ComercioActivity.this, s , Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(ComercioActivity.this, PrintActivity.class);
+                        intent.putExtra("contribuyente", editContribuyente.getText().toString().trim());
+                        intent.putExtra("comercio", editComercio.getText().toString().trim());
+                        intent.putExtra("importe", editImporte.getText().toString().trim());
+                        intent.putExtra("tipo", "Comercio");
+                        intent.putExtra("verificar", true);
+                        startActivity(intent);
                     }
+
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                    //Descartar el diálogo de progreso
+                        //Descartar el diálogo de progreso
                         loading.dismiss();
-                    //Showing toast
+                        //Showing toast
                         Toast.makeText(ComercioActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
                     }
                 }){
@@ -425,6 +457,8 @@ public class ComercioActivity extends AppCompatActivity{
                 params.put(KeyValue.KEY_DIRECCION, direcValue);
                 params.put(KeyValue.KEY_COORDENADAS, coorValue);
                 params.put(KeyValue.KEY_COBRADOR, String.valueOf(user.getId()));
+                params.put(KeyValue.VERIFICAR_LOOP, verificarLoop);
+                verificarLoop = "false";
                 //Parámetros de retorno
                 return params;
             }
@@ -457,5 +491,25 @@ public class ComercioActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
         }
+    }
+
+    private void showInfoAlert() {
+        new AlertDialog.Builder(ComercioActivity.this)
+                .setTitle("Cobro a Comercio")
+                .setMessage("Quieres Realizar el cobro?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(verificar){
+                            createHero("domicilio conocido", "lag: 1000, Log: 0001");
+                            //createHero(dirGeo, lagLogGeo);
+                        }else{
+                            uploadImage("domicilio conocido", "lag: 1000, Log: 0001");
+                            //uploadImage( dirGeo, lagLogGeo);
+                        }
+                    }
+                })
+                .setNegativeButton("CANCEL", null)
+                .show();
     }
 }

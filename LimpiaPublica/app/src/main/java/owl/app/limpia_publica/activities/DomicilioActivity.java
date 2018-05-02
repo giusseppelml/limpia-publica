@@ -2,6 +2,7 @@ package owl.app.limpia_publica.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -13,6 +14,7 @@ import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -65,34 +67,18 @@ public class DomicilioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_domicilio);
-        editContribuyente = (EditText)findViewById(R.id.editTextContribuyenteAct);
-        editImporte = (EditText)findViewById(R.id.editTextImporteAct);
-        buttonCobrar = (Button)findViewById(R.id.cobrarButtonAct);
-        progressBar = (ProgressBar)findViewById(R.id.progressBarAct);
+        editContribuyente = (EditText) findViewById(R.id.editTextContribuyenteAct);
+        editImporte = (EditText) findViewById(R.id.editTextImporteAct);
+        buttonCobrar = (Button) findViewById(R.id.cobrarButtonAct);
+        progressBar = (ProgressBar) findViewById(R.id.progressBarAct);
 
         buttonCobrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                createHero(dirGeo, lagLogGeo, DateTime.getDateTime());
+                showInfoAlert();
             }
         });
 
-        //Aqui termina crud
-        //-----------------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------------
-        //Aqui empieza geolizacion
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,},
-                    1000);
-        } else {
-            locationStart();
-        }
-
-        //Aqui termina geolizacion
     }
 
     //Aqui empieza crud
@@ -178,6 +164,12 @@ public class DomicilioActivity extends AppCompatActivity {
                     //we will create this method right now it is commented
                     //because we haven't created it yet
                     //refreshHeroList(object.getJSONArray("heroes"));
+                    Intent intent = new Intent(DomicilioActivity.this, PrintActivity.class);
+                    intent.putExtra("contribuyente", editContribuyente.getText().toString().trim());
+                    intent.putExtra("importe", editImporte.getText().toString().trim());
+                    intent.putExtra("tipo", "vivienda");
+                    intent.putExtra("verificar", false);
+                    startActivity(intent);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -308,4 +300,18 @@ public class DomicilioActivity extends AppCompatActivity {
     }
     //Aqui termina geolizacion
 
+    private void showInfoAlert() {
+        new AlertDialog.Builder(DomicilioActivity.this)
+                .setTitle("Cobro domiciliario")
+                .setMessage("Quieres Realizar el cobro?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //createHero(dirGeo, lagLogGeo, DateTime.getDateTime());
+                        createHero("domicilio conocido", "lag: 1000, Log: 0001", DateTime.getDateTime());
+                    }
+                })
+                .setNegativeButton("CANCEL", null)
+                .show();
+    }
 }

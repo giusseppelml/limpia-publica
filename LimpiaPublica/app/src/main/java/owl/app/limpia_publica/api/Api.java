@@ -6,9 +6,9 @@ package owl.app.limpia_publica.api;
 
 public class Api {
 
-    //private static final String ROOT_URL = "http://cosamaloapan.mx/pagos/vistas/Json/";
-    private static final String ROOT_URL = "http://192.168.1.68/pagos/vistas/Json/";
-    //private static final String ROOT_URL = "http://192.168.1.77/LimpiaPublicaJson/";
+    private static final String ROOT_URL = "http://192.168.0.16/pagos/vistas/Json/";
+
+    //private static final String ROOT_URL = "http://limpiapublica.wsite.com.mx/vistas/Json/";
     private static final String ROOT_LOGIN = ROOT_URL + "Api.php?apicall=";
 
     //login

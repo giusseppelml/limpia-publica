@@ -32,14 +32,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        if (!SharedPrefManager.getInstance(LoginActivity.this).isLoggedIn()) {
 
         editTextUsername = (EditText) findViewById(R.id.editTextUser);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
-
-        //if user presses on login
-        //calling the method login
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,27 +44,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /*if user presses on not registered
-        findViewById(R.id.textViewRegister).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //open register screen
-                finish();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
-
-        mi codigo
-        //------------------------------------------------
-        login = (Button)findViewById(R.id.btnLogin);
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });*/
+        } else {
+            Intent intentFinal = new Intent(LoginActivity.this, MainActivity.class);
+            intentFinal.setFlags(intentFinal.FLAG_ACTIVITY_NEW_TASK | intentFinal.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentFinal);
+        }
     }
 
     private void userLogin() {

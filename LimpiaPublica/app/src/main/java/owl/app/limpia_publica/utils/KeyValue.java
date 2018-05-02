@@ -18,6 +18,7 @@ public class KeyValue {
     public static String KEY_DIRECCION = "direccion";
     public static String KEY_COORDENADAS = "coordenadas";
     public static String KEY_COBRADOR = "cobrador";
+    public static String VERIFICAR_LOOP = "verificar";
 
     public static String VALUE_COMERCIO = "comercio";
 

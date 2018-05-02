@@ -25,8 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ComercioActivity" />
-        <activity android:name=".activities.DomicilioActivity"></activity>
+        <activity android:name=".activities.ComercioActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.DomicilioActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.PrintActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

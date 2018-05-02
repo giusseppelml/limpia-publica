@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         Intent intent = new Intent(MainActivity.this, ComercioActivity.class);
+                        intent.putExtra("seguridad", true);
                         startActivity(intent);
                         break;
 
